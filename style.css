@@ -1,0 +1,219 @@
+body {
+   /* background-image: url(https://ychef.files.bbci.co.uk/976x549/p0c5zp0h.jpg);*/
+    background-size:cover;
+    background-color: #ffffcc;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.6px;
+    word-spacing: -1px;
+    color: #7b7356;
+    font-weight: normal;
+    text-decoration: none;
+    font-style: normal;
+    text-transform: none;
+    text-align: justify;
+  
+  }
+  circle {fill: darkgreen; stroke: antiquewhite;}
+  rect {fill: coral; stroke: antiquewhite;}
+  .dot {
+    fill: #f44336;
+    stroke: #fff;
+}
+.line {fill: blueviolet; stroke: antiquewhite; }
+  #container{
+    position: relative ;
+    top: 50px;
+    left: 100px;
+    right: 100px;
+    bottom: 200px;
+  }
+  #play-button {
+    position: relative;
+    top: 910px;
+    left: 100px;
+    background: #277D6E;
+    padding-right: 26px;
+    border-radius: 3px;
+    border: none;
+    color: white;
+    margin: 0;
+    padding: 0 12px;
+    width: 60px;
+    cursor: pointer;
+    height: 30px;
+  }
+  #analysis {
+    position: absolute;
+    top: 300px;
+    left: 1100px;
+    right: 50;
+    font-size: large;
+  }
+  #play-button:hover {
+    background-color: #696969;
+  }    
+  
+  .ticks {
+    font-size: 10px;
+  }
+
+  .track,
+  .track-inset,
+  .track-overlay {
+    stroke-linecap: square;
+  }
+
+  .track {
+    stroke: #000;
+    stroke-opacity: 0.3;
+    stroke-width: 10px;
+  }
+
+  .track-inset {
+    stroke: #dcdcdc;
+    stroke-width: 8px;
+  }
+
+  .track-overlay {
+    pointer-events: circle ;
+    stroke-width: 50px;
+    stroke: transparent;
+    cursor: crosshair;
+  }
+
+  .handle {
+    fill: #fff;
+    stroke: #000;
+    stroke-opacity: 0.5;
+    stroke-width: 1.25px;
+  }
+  #radio{
+    font-size: 15px;
+    letter-spacing: 0.6px;
+    word-spacing: -1px;
+    color: #998024;
+    font-weight: normal;
+    text-decoration: none;
+    font-style: normal;
+    text-transform: none;
+    position: absolute;
+    top: 550px;
+    left: 1100px;
+    right: 50;
+
+  }
+  
+  label input[type="radio"]:checked ~ span {
+    color: #F1F6F6;
+    background-color:#998024;
+  }
+  
+  .warning {
+      background-color: #ffffcc;
+      border-left: 10px solid #ffeb3b;
+      height: 30px;
+      width: 70%;
+      text-align: center;
+      font-size: 18px;
+      padding: 10px;
+  
+  }
+  .info {
+    height: 150px;
+    width: 96%;
+  }
+  
+  .nav {
+    height: 50px;
+    width: 70%;
+  }
+  
+  .plot{
+    fill: #277D6E;
+    width: 60%
+  }
+  
+  h1 {
+    color: coral;
+  }
+  
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+  
+  
+
+  
+  .hidden {
+    display: none;
+  }
+  
+  .citation {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #5E1224;
+    color: white;
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 0.6px;
+    word-spacing: -1px;
+  }
+  
+  a.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  a.backbutton {
+    background-color: #f44336; /* Red */
+    border: none;
+    color: white;
+    padding: 8px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  
+  /* div.tooltip {
+    color : #222;
+    position: absolute;
+    background-color: white;
+    font-family: monospace;
+    border: solid;
+    visibility: hidden;
+    border-width: 1px;
+    border-radius: 10px;
+    padding: 3px;
+  } */
+  
+  
+  
+  .custom-select select {
+    background-color: #0099f7;
+    color: white;
+    padding: 10px;
+    width: 200px;
+    border: none;
+    font-size: 15px;
+
+    -webkit-appearance: button;
+    appearance: button;
+    outline: none;
+  }
+  
+  .custom-select select option {
+    padding: 30px;
+  }
+  
