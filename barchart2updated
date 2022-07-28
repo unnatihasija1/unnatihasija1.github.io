@@ -117,31 +117,57 @@
             width = 550 - margin.left - margin.right,
             height = 550 - margin.top - margin.bottom;
 
-          tooltip = d3.select("svg")
-            .data(countriesDropDown)
-            .enter()
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "lightblue")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
-            .style("position", "absolute")
-            .style("width", "auto")
-            .style("height", "auto")
+          // tooltip = d3.select("svg")
+          //   .data(countriesDropDown)
+          //   .enter()
+          //   .append("div")
+          //   .style("opacity", 0)
+          //   //.attr("class", "tooltip")
+          //   .style("background-color", "lightblue")
+          //   .style("border", "solid")
+          //   .style("border-width", "1px")
+          //   .style("border-radius", "5px")
+          //   .style("padding", "10px")
+          //   .style("position", "absolute")
+          //   .style("width", "auto")
+          //   .style("height", "auto")
 
           mouseover = function (countriesDropDown) {
+            var typeofemission = '';
+            switch (arguments[1]) {
+
+              case 0:
+                typeofemission = 'Trade CO2'
+                break;
+              case 1:
+                typeofemission = 'Coal CO2'
+                break;
+              case 2:
+                typeofemission = 'Gas CO2'
+                break;
+              case 3:
+                typeofemission = 'Oil CO2'
+                break;
+              case 4:
+                typeofemission = 'Methane'
+                break;
+              case 5:
+                typeofemission = 'Nitrous Oxide'
+                break;
+
+              default:
+                typeofemission = 'Total CO2'
+            }
+
             d3.select(this).transition()
               .duration('200')
               .attr("fill", "red");
             tooltip
-              .html("Emissions:" + countriesDropDown + "<br>  Year:" + selectedYear)
+              .html("Emission Type:" + typeofemission + "<br> Value:" + this.__data__ + "<br>  Year:" + selectedYear)
               .style("left", (d3.event.pageX) + "px")
               .style("top", (d3.event.pageY) + "px")
-              .style("left", (d3.mouse(this)[0] + 250) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-              .style("top", (d3.mouse(this)[1] + 230) + "px")
+              .style("left", (d3.mouse(this)[0] + 220) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+              .style("top", (d3.mouse(this)[1] + 210) + "px")
               .style("opacity", 1)
           }
           mouseleave = function (selected_year_data) {
@@ -285,6 +311,21 @@
           updateBars = function (data) {
             // First update the y-axis domain to match data
             //yAxisHandleForUpdate.exit
+
+            tooltip = d3.select("svg")
+              .data(data)
+              .enter()
+              .append("div")
+              .style("opacity", 0)
+              //.attr("class", "tooltip")
+              .style("background-color", "lightblue")
+              .style("border", "solid")
+              .style("border-width", "1px")
+              .style("border-radius", "5px")
+              .style("padding", "10px")
+              .style("position", "absolute")
+              .style("width", "auto")
+              .style("height", "auto")
             var color = d3.scaleOrdinal(d3.schemeCategory10)
             yScale.domain(d3.extent(data));
             yAxisHandleForUpdate.call(yAxis);
@@ -302,12 +343,14 @@
               .attr("height", function (d, i) { return height - yScale(d); })
               .on("mouseover", mouseover)
               // .on("mouseover", function () {
-              //   d3.select(this).attr("fill", "blue");
+              //   d3.select(this).attr("fill", "red")
+              //   d3.select(this).append("text").text(this.__data__);
               // })
-              .on("mouseout", function (d, i) {
-                d3.select(this).attr("fill", "coral");
-              })
-            //.on("mouseleave", mouseleave);
+              // .on("mouseleave", function (d, i) {
+              //   d3.select(this).attr("fill", "coral");
+              // })
+              .on("mouseleave", mouseleave);
+
 
             // Update old ones, already have x / width from before
             bars
