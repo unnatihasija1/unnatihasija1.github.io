@@ -15,7 +15,7 @@ body {
   
   }
   circle {fill: darkgreen; stroke: antiquewhite;}
-  rect {fill: coral; stroke: antiquewhite;}
+   rect { stroke: antiquewhite;} */
   .dot {
     fill: #f44336;
     stroke: #fff;
@@ -45,7 +45,7 @@ body {
   }
   #analysis {
     position: absolute;
-    top: 300px;
+    top: 250px;
     left: 1100px;
     right: 50;
     font-size: large;
@@ -98,7 +98,7 @@ body {
     font-style: normal;
     text-transform: none;
     position: absolute;
-    top: 550px;
+    top: 650px;
     left: 1100px;
     right: 50;
 
