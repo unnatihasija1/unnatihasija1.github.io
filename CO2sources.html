@@ -1,0 +1,683 @@
+<html>
+
+<head>
+  <title>Narrative Project</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.4.2/vega-tooltip.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload='init()'>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+          aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+        <a class="navbar-brand">Carbon Footprint</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Total GHG and Total population</a></li>
+          <li class="active"><a>Different contributors to GHG emissions</a></li>
+          <li><a href="linegraph2.html">Total GHG growth in 20 years</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <br>
+    <br>
+    <div class="page-header">
+      <h1></h1>
+    </div>
+    <p class="lead">
+      There are different contributing factors for the emission of GHG.
+    </p>
+    <br>
+    <div id="scatter">
+      <svg width=1200 height=800>
+        <g class="barchart"></g>
+        <g class="slider"></g>
+      </svg>
+    </div>
+    <div>
+      <p id="analysis"></strong>
+
+      </p>
+    </div>
+    <div id="button2">
+      <p>Go back to check the relation between Total GHG and population and Total GHG and GDP.</p>
+      <!-- <button type="button">Next</button> -->
+      <a href="index.html">&raquo; Previous</a>
+      <p>Click Next to see the Total GHG growth for different countries in last 20 years</p>
+      <a href="linegraph2.html">Next &raquo;</a>
+    </div>
+    <!-- <div id="button">
+        <button id="play-button">Play</button>
+      </div> -->
+  </div>
+
+  <!-- <ul class="pager">
+      <li><a href="">Previous</a></li>
+      <li><a href="">Next</a></li>
+    </ul> -->
+
+  <footer class="footer">
+  </footer>
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.6.0/d3.min.js"></script> -->
+  <script src='https://d3js.org/d3.v5.min.js'></script>
+  <script src=" https://d3-annotation.susielu.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
+  <script>
+    var diffCO2sources = ["trade_co2", "coal_co2", "gas_co2", "oil_co2", "methane", "nitrous_oxide"];
+    async function init() {
+
+      var dataset = d3.csv("https://unnatihasija1.github.io/GHGEmissionsData.csv").then(function (data) {
+        var year = '2010';
+        dataglobal = data;
+        if (selectedYear = ' ') {
+          selectedYear = year;
+        }
+        previousYear = selectedYear;
+        firstCall = true;
+        currentCountry = 'Afghanistan';
+        drawBar(data, selectedYear);
+
+      });
+
+
+
+      function drawBar(data, selectedYear) {
+
+        //define countriesdropdown data for creating an array that contains values of all the required CO2s for all countries for a given year.
+        //this should be called only when the year has changed through slider
+
+        var makeCountriesDropdown = function (data, selectedYear) {
+          filtereddata = data.filter(function (e) { return (e.year == selectedYear) })
+          var countriesDropDown = {};
+          filtereddata.forEach(function (d) {
+            var countries = d.country;
+            countriesDropDown[countries] = [];
+            diffCO2sources.forEach(function (field) {
+              countriesDropDown[countries].push(+d[field]);
+            });
+          });
+          // if (firstCall == false) {
+          //     var allCountries = Object.keys(countriesDropDown);
+          //     var initialData = countriesDropDown[allCountries[0]];
+          //     updateBars(initialData);
+          // }
+          // if (firstCall == true) { 
+          barchart(countriesDropDown);
+          // }
+        }
+        //makeCountriesDropdown(data, selectedYear);
+        //define barchart by defining the Axes, bars, etc.
+        var barchart = function (countriesDropDown) {
+          var margin = { top: 100, right: 50, bottom: 100, left: 50 },
+            width = 550 - margin.left - margin.right,
+            height = 550 - margin.top - margin.bottom;
+
+          // tooltip = d3.select("svg")
+          //   .data(countriesDropDown)
+          //   .enter()
+          //   .append("div")
+          //   .style("opacity", 0)
+          //   //.attr("class", "tooltip")
+          //   .style("background-color", "lightblue")
+          //   .style("border", "solid")
+          //   .style("border-width", "1px")
+          //   .style("border-radius", "5px")
+          //   .style("padding", "10px")
+          //   .style("position", "absolute")
+          //   .style("width", "auto")
+          //   .style("height", "auto")
+
+          mouseover = function (countriesDropDown) {
+            var typeofemission = '';
+            switch (arguments[1]) {
+
+              case 0:
+                typeofemission = 'Trade CO2'
+                break;
+              case 1:
+                typeofemission = 'Coal CO2'
+                break;
+              case 2:
+                typeofemission = 'Gas CO2'
+                break;
+              case 3:
+                typeofemission = 'Oil CO2'
+                break;
+              case 4:
+                typeofemission = 'Methane'
+                break;
+              case 5:
+                typeofemission = 'Nitrous Oxide'
+                break;
+
+              default:
+                typeofemission = 'Total CO2'
+            }
+
+            d3.select(this).transition()
+              .duration('200')
+              .attr("fill", "red");
+            tooltip
+              .html("Emission Type:" + typeofemission + "<br> Value:" + this.__data__ + "<br>  Year:" + selectedYear)
+              .style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY) + "px")
+              .style("left", (d3.mouse(this)[0] + 220) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+              .style("top", (d3.mouse(this)[1] + 210) + "px")
+              .style("opacity", 1)
+          }
+          mouseleave = function (selected_year_data) {
+            d3.select(this).transition()
+              .duration('200')
+              .attr("fill", "coral");
+            tooltip
+              .transition()
+              .duration(200)
+              .style("opacity", 0)
+          }
+
+          if (firstCall == false) {
+            var allCountries = Object.keys(countriesDropDown);
+            var initialData = countriesDropDown[allCountries[0]];
+            updateBars(initialData);
+          }
+          else {
+            // Make x scale
+            xScale = d3.scaleBand()
+              .domain(diffCO2sources)
+              .range([0, width], 0.1);
+
+            // Make y scale, the domain will be defined on bar update
+            yScale = d3.scaleLinear()
+              .range([height, 0]);
+
+            // Create canvas
+            canvas = d3.select("svg")
+              // .append("svg")
+              // .attr("width",  width  + margin.left + margin.right)
+              // .attr("height", height + margin.top  + margin.bottom)
+              .attr("class", "barchart")
+              .append("g")
+              .attr("transform", "translate(100,100)");
+
+            // Make x-axis and add to canvas
+            xAxis = d3.axisBottom(xScale).tickFormat(function (d) { return d.x; });
+
+            xAxisHandle = canvas.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(xAxis);
+            xAxisHandle.append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 6)
+              .attr("dy", "1em")
+              .style("text-anchor", "left")
+              .text("Value")
+            //.text(["trade_co2", "coal_co2", "gas_co2", "oil_co2", "methane", "nitrous_oxide"]);
+            // Make y-axis and add to canvas
+            yAxis = d3.axisLeft(yScale);
+
+
+            yAxisHandleForUpdate = canvas.append("g")
+              .attr("class", "y axis")
+              .call(yAxis);
+
+
+            yAxisHandleForUpdate.append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 6)
+              .attr("dy", ".71em")
+              .style("text-anchor", "end")
+              .text("Value");
+
+            d3.select("svg")
+              .append("g")
+              .append("text")
+              .attr("y", 490)
+              .attr("x", -135)
+              .attr("transform", "rotate(-30)")
+              .attr("font-size", "15px")
+              .attr("text-anchor", "middle")
+              .text("Trade CO2");
+
+            d3.select("svg")
+              .append("g")
+              .append("text")
+              .attr("y", 520)
+              .attr("x", -70)
+              .attr("transform", "rotate(-30)")
+              .attr("font-size", "15px")
+              .attr("text-anchor", "middle")
+              .text("Coal CO2");
+
+            d3.select("svg")
+              .append("g")
+              .append("text")
+              .attr("y", 550)
+              .attr("x", -5)
+              .attr("transform", "rotate(-30)")
+              .attr("font-size", "15px")
+              .attr("text-anchor", "middle")
+              .text("Gas CO2");
+
+            d3.select("svg")
+              .append("g")
+              .append("text")
+              .attr("y", 580)
+              .attr("x", 60)
+              .attr("transform", "rotate(-30)")
+              .attr("font-size", "15px")
+              .attr("text-anchor", "middle")
+              .text("Oil CO2");
+
+
+            d3.select("svg")
+              .append("g")
+              .append("text")
+              .attr("y", 620)
+              .attr("x", 125)
+              .attr("transform", "rotate(-30)")
+              .attr("font-size", "15px")
+              .attr("text-anchor", "middle")
+              .text("Methane");
+
+            d3.select("svg")
+              .append("g")
+              .append("text")
+              .attr("y", 665)
+              .attr("x", 190)
+              .attr("transform", "rotate(-30)")
+              .attr("font-size", "15px")
+              .attr("text-anchor", "middle")
+              .text("Nitrous Oxide");
+
+            d3.select("svg")
+              .append("g")
+              .append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 50)
+              .attr("x", -300)
+              .attr("font-size", "15px")
+              .attr("text-anchor", "middle")
+              .text("Emission values in tons")
+            // d3.selectAll("rect").data(clearAll).exit().remove()
+            // d3.selectAll("xAxis").data(clearAll).exit().remove()
+            // d3.selectAll("yAxisHandleForUpdate").data(clearAll).exit().remove()
+          }
+          showAnnotation = function (country) {
+
+            const annotations = [
+
+              {
+                note: {
+                  label: "For the country, " + country + " we can see that the major source of Greenhouse gases is Methane ",
+                  //title: "Linear GHG increase",
+                  wrap: 200,
+                  align: "Methane"
+
+                },
+
+                connector: {
+                  end: "arrow" // 'dot' also available
+                },
+
+                x: 600,
+                y: 100,
+                dy: -25,
+                dx: 60,
+                className: "Linear"
+              }].map(function (d) { d.color = "red"; return d })
+            const annotations2 = [{
+              note: {
+                label: "For the country, " + country + " we can see that the major source of Greenhouse gases is Oil ",
+                // title: "Linear GHG decline",
+                wrap: 150,
+                align: "right"
+
+              },
+
+              connector: {
+                end: "arrow" // 'dot' also available
+              },
+
+              x: 600,
+              y: 100,
+              dy: -25,
+              dx: 60,
+              className: "Oil"
+            }
+
+            ].map(function (d) { d.color = "#04AA6D"; return d })
+
+            const annotations3 = [{
+              note: {
+                label: "For the country, " + country + " we can see that the major source of Greenhouse gases is Gas ",
+                // title: "Linear GHG decline",
+                wrap: 150,
+                align: "right"
+
+              },
+
+              connector: {
+                end: "arrow" // 'dot' also available
+              },
+
+              x: 600,
+              y: 100,
+              dy: -25,
+              dx: 60,
+              className: "Gas"
+            }
+
+            ].map(function (d) { d.color = "#04AA6D"; return d })
+
+            const annotations4 = [{
+              note: {
+                label: "For the country, " + country + " we can see that the major source of Greenhouse gases is Coal ",
+                // title: "Linear GHG decline",
+                wrap: 150,
+                align: "right"
+
+              },
+
+              connector: {
+                end: "arrow" // 'dot' also available
+              },
+
+              x: 600,
+              y: 100,
+              dy: -25,
+              dx: 60,
+              className: "Coal"
+            }
+
+            ].map(function (d) { d.color = "#04AA6D"; return d })
+
+            const annotations5 = [{
+              note: {
+                label: "For the country, " + country + " we can see that the major source of Greenhouse gases is Nitrous Oxide ",
+                // title: "Linear GHG decline",
+                wrap: 150,
+                align: "right"
+
+              },
+
+              connector: {
+                end: "arrow" // 'dot' also available
+              },
+
+              x: 600,
+              y: 100,
+              dy: -25,
+              dx: 60,
+              className: "NO2"
+            }
+
+            ].map(function (d) { d.color = "#04AA6D"; return d })
+            const makeAnnotations = d3.annotation()
+              .type(d3.annotationLabel)
+              .annotations(annotations)
+            const makeAnnotations2 = d3.annotation()
+              .type(d3.annotationLabel)
+              .annotations(annotations2)
+            const makeAnnotations3 = d3.annotation()
+              .type(d3.annotationLabel)
+              .annotations(annotations3)
+            const makeAnnotations4 = d3.annotation()
+              .type(d3.annotationLabel)
+              .annotations(annotations4)
+            const makeAnnotations5 = d3.annotation()
+              .type(d3.annotationLabel)
+              .annotations(annotations5)
+
+            annotationsG = d3.select("svg").select("g");
+
+            if (country == 'Afghanistan' || country == 'Angola' || country == 'Argentina' || country == 'Bangladesh' || 
+            country == 'Barbados' || country == 'Bolivia' || country == 'Brazil' ||country == 'Cambodia' ||country == 'Columbia'
+            ||country == 'Ethiopia' ||country == 'Gambia' ||country == 'Georgia' ||country == 'Ghana' ||country == 'Grenada'
+            ||country == 'Gautemala' ||country == 'Guinea' ||country == 'Haiti' ||country == 'Indonesia' ||country == 'Kenya'
+            ||country == 'Laos'||country == 'Libya' ||country == 'Madagascar' ||country == 'Myanmar' ||country == 'Namibia'
+            ||country == 'Nepal' ||country == 'New Zealand' ||country == 'Niger' ||country == 'Nigeria' ||country == 'Pakistan'
+            ||country == 'Paraguay' ||country == 'Peru' ||country == 'Russia' ||country == 'Somalia' ||country == 'Sudan' ||country == 'Tajakistan'
+            ||country == 'Tanzania' ||country == 'Uruguay' ||country == 'Uzbekistan' ||country == 'Vietnam' ||country == 'Zambia' ||country == 'Zimbabwe') {
+
+              annotationsG
+                //.attr("class", "annotation-group")
+                .attr("class", "Methane")
+                .call(makeAnnotations)
+
+            }
+            if (country == 'Albania' || country == 'Andorra' || country == 'Austria' || country == 'Canada' || country == 'Chile'
+            || country == 'Costa Rica' || country == 'Croatia' || country == 'Cuba' || country == 'Cyprus' || country == 'Denmark'
+            || country == 'Dominica' || country == 'Dominican Republic' || country == 'Ecuador' || country == 'Eygypt' || country == 'El Salvador'
+            || country == 'France'|| country == 'Greece' || country == 'Guyana' || country == 'Iceland' || country == 'Iraq' || country == 'Ireland'
+            || country == 'Israel' || country == 'Italy' || country == 'Jamaica' || country == 'Japan' || country == 'Kuwait' || country == 'Lebanon'
+            || country == 'Malaysia' || country == 'Maldives' || country == 'Mauritius' || country == 'Mexico' || country == 'Morocco'|| country == 'Norway'
+            || country == 'Portugal' || country == 'Saudi Arabia' || country == 'Seychelles' || country == 'Slovenia'|| country == 'Spain'
+            || country == 'Sri Lanka' || country == 'Sweden' || country == 'Syria' || country == 'Thailand' || country == 'United States' || country == 'Venezuela'
+            || country == 'Yemen' || country == 'Germany') {
+              annotationsG
+                //.attr("class", "annotation-group")
+                .attr("class", "Oil")
+                .call(makeAnnotations2)
+
+            }
+            
+            if (country == 'Algeria' || country == 'Canada' || country == 'Bahrain' || country == 'Belarus' || country == 'Hungary'
+            || country == 'Iran' || country == 'Netherlands' || country == 'Oman' || country == 'Qatar' || country == 'Tunisia'
+            || country == 'United Arab Emirates' || country == 'United Kingdom') {
+              annotationsG
+                //.attr("class", "annotation-group")
+                .attr("class", "Gas")
+                .call(makeAnnotations3)
+
+            }
+            if (country == 'India' || country == 'Ukraine' || country == 'South Africa' || country == 'North Korea'|| country == 'Australia'
+            || country == 'Bulgaria' || country == 'China' || country == 'Czechia' || country == 'Finland' || country == 'Kazakhstan'
+            || country == 'Poland' || country == 'Ukraine' || country == 'Serbia' || country == 'Slovakia' || country == 'South Korea'
+            || country == 'Turkey'){
+              annotationsG
+                //.attr("class", "annotation-group")
+                .attr("class", "Coal")
+                .call(makeAnnotations4)
+            }
+            annotationsG.exit().remove;
+          }
+          updateBars = function (data) {
+            // First update the y-axis domain to match data
+            //yAxisHandleForUpdate.exit
+            showAnnotation(currentCountry);
+            tooltip = d3.select("svg")
+              .data(data)
+              .enter()
+              .append("div")
+              .style("opacity", 0)
+              //.attr("class", "tooltip")
+              .style("background-color", "lightblue")
+              .style("border", "solid")
+              .style("border-width", "1px")
+              .style("border-radius", "5px")
+              .style("padding", "10px")
+              .style("position", "absolute")
+              .style("width", "auto")
+              .style("height", "auto")
+            var color = d3.scaleOrdinal(d3.schemeCategory10)
+            yScale.domain(d3.extent(data));
+            yAxisHandleForUpdate.call(yAxis);
+
+
+            var bars = canvas.selectAll(".bar").data(data);
+            //bars.exit().remove();
+            bars.enter()
+              .append("rect")
+              .attr("class", "bar")
+              .attr("x", function (d, i) { return xScale(diffCO2sources[i]); })
+              .attr("width", xScale.bandwidth())
+              .attr("fill", "coral")
+              .attr("y", function (d, i) { return yScale(d); })
+              .attr("height", function (d, i) { return height - yScale(d); })
+              .on("mouseover", mouseover)
+              // .on("mouseover", function () {
+              //   d3.select(this).attr("fill", "red")
+              //   d3.select(this).append("text").text(this.__data__);
+              // })
+              // .on("mouseleave", function (d, i) {
+              //   d3.select(this).attr("fill", "coral");
+              // })
+              .on("mouseleave", mouseleave);
+
+
+            // Update old ones, already have x / width from before
+            bars
+              .transition().duration(800)
+              .attr("y", function (d, i) { return yScale(d); })
+              .attr("height", function (d, i) { return height - yScale(d); });
+
+            // Remove old ones
+            clearAll = [];
+            bars.exit().remove();
+
+          };
+
+          // Handler for dropdown value change
+          var dropdownChange = function () {
+            var newcountries = d3.select(this).property('value'),
+              newData = countriesDropDown[newcountries];
+            currentCountry = newcountries;
+            updateBars(newData);
+          };
+
+          // Get names of countries1, for dropdown
+          var countries1 = Object.keys(countriesDropDown).sort();
+
+          if (firstCall == true) {
+
+            var dropdown = d3.select("#scatter")
+              .insert("select", "svg")
+              .on("change", dropdownChange);
+
+            dropdown.selectAll("option")
+              .data(countries1)
+              .enter().append("option")
+              .attr("value", function (d) { return d; })
+              // .attr("height", 50)
+              // .attr("width", 100)
+              .text(function (d) {
+                return d[0].toUpperCase() + d.slice(1, d.length); // capitalize 1st letter
+
+              });
+          }
+          var initialData = countriesDropDown[countries1[0]];
+          updateBars(initialData);
+
+
+          /// slider part
+          if (firstCall == true) {
+            var formatDateIntoYear = d3.timeFormat("%Y");
+            var formatDate = d3.timeFormat("%b %Y");
+            var parseDate = d3.timeParse("%m/%d/%y");
+
+            var startDate = new Date("2010-01-01"),
+              endDate = new Date("2020-01-01");
+
+
+            var svg = d3.select("svg");
+            ////////// slider //////////
+
+            var moving = false;
+            var currentValue = 0;
+            var targetValue = 650;
+
+            //var playButton = d3.select("#play-button");
+
+            var xT = d3.scaleTime()
+              .domain([startDate, endDate])
+              .range([0, targetValue])
+              .clamp(true);
+
+            var slider = svg.append("g")
+              .attr("class", "slider")
+              .attr("transform", "translate(50,550)");
+
+            slider.append("line")
+              .attr("class", "track")
+              .attr("x1", xT.range()[0])
+              .attr("x2", xT.range()[1])
+              .select(function () { return this.parentNode.appendChild(this.cloneNode(true)); })
+              .attr("class", "track-inset")
+              .select(function () { return this.parentNode.appendChild(this.cloneNode(true)); })
+              .attr("class", "track-overlay")
+              .call(d3.drag()
+                .on("start.interrupt", function () { slider.interrupt(); })
+                .on("start drag", function () {
+                  currentValue = d3.event.x;
+                  update(xT.invert(currentValue));
+                })
+              );
+
+            slider.insert("g", ".track-overlay")
+              .attr("class", "ticks")
+              .attr("transform", "translate(0," + 18 + ")")
+              .selectAll("text")
+              .data(xT.ticks(10))
+              .enter()
+              .append("text")
+              .attr("x", xT)
+              .attr("y", 10)
+              .attr("text-anchor", "middle")
+              .text(function (f) { return formatDateIntoYear(f); });
+
+            var handle = slider.insert("circle", ".track-overlay")
+              .attr("class", "handle")
+              .attr("r", 9);
+
+            var label = slider.append("text")
+              .attr("class", "label")
+              .attr("text-anchor", "middle")
+              .text(formatDate(startDate))
+              .attr("transform", "translate(0," + (-25) + ")")
+          }
+          function update(h) {
+            // update position and text of label according to slider scale
+            handle.attr("cx", xT(h));
+            label
+              .attr("x", xT(h))
+              .text(formatDate(h));
+
+            // filter data set and redraw plot
+            //var newData = data.filter(function(data) {return (d.year==formatDateIntoYear(h))});
+            selectedYear = formatDateIntoYear(h)
+            firstCall = false
+            if (previousYear == selectedYear) {
+              var initialData = countriesDropDown[countries1[0]];
+              updateBars(initialData);
+            }
+            else {
+              makeCountriesDropdown(dataglobal, selectedYear);
+            }
+
+          }
+        }
+        makeCountriesDropdown(data, selectedYear);
+
+      }
+    }
+
+  </script>
+</body>
+
+</html>
