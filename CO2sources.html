@@ -56,7 +56,7 @@
       <p>Go back to check the relation between Total GHG and population.</p>
       <!-- <button type="button">Next</button> -->
       <a href="index.html">&raquo; Previous</a>
-      <p>Click Next to see the Total GHG growth for different countries in last 20 years</p>
+      <p>Click Next to see how the trend of Total GHG has changed for different countries in last 20 years</p>
       <a href="CO2trend.html">Next &raquo;</a>
     </div>
     <!-- <div id="button">
@@ -181,11 +181,11 @@
           }
           mouseleave = function (selected_year_data) {
             d3.select(this).transition()
-              .duration(500)
+              .duration(2000)
               .attr("fill", "coral");
             tooltip
               .transition()
-              .duration(800)
+              .duration(1200)
               .style("opacity", 0)
           }
 
