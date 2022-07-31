@@ -2,8 +2,9 @@
 
 <head>
     <title>Narrative Project</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.4.2/vega-tooltip.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,8 +23,8 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="index.html">Total GHG and Total population</a></li>
-                    <li><a href="CO2sources.html">Different contributors to GHG emissions</a></li>
+                    <li><a href="ProjectWithNavigation.html">Total GHG and Total population</a></li>
+                    <li><a href="barchart2.html">Different contributors to GHG emissions</a></li>
                     <li class="active"><a>Total GHG growth in 20 years</a></li>
                 </ul>
             </div>
@@ -57,12 +58,12 @@
 
             </p>
         </div>
-        <div id="button3">
+        <div id="button">
             <p>Go back to check the different contributors to GHG</p>
             <!-- <button type="button">Next</button> -->
-            <a href="CO2sources.html">&laquo; Previous</a>
-            
-          </div>
+            <a href="barchart2.html">&laquo; Previous</a>
+
+        </div>
         <!-- <div id="button">
         <button id="play-button">Play</button>
       </div> -->
@@ -136,7 +137,7 @@
                 const yAxes = (d) => d.total_ghg;
                 const xAxes = (d) => d.year;
                 clearAll = []
-                d3.selectAll("g").data(clearAll).exit().remove()
+                d3.selectAll("g").data(clearAll).exit().remove();
 
                 var layout = {
                     width: window.innerWidth * 0.6,
@@ -321,7 +322,7 @@
                     const GDP = yearFiltered[0].gdp;
                     tooltip
                         // .select("emissions")
-                        .html("Population:" + TotalPopulation + "<br> Total GreenHouseGas Emissions" + TotalGHGEmissions(closestYValue) + "<br> GDP:" + GDP)
+                        .html("Year:" + closestXValue + "<br>Population:" + TotalPopulation + "<br> Total GreenHouseGas Emissions" + TotalGHGEmissions(closestYValue) + "<br> GDP:" + GDP)
                     //.html(TotalGHGEmissions(closestYValue));
 
                     const x = xScale(closestXValue) + layout.margin.left;
@@ -361,7 +362,7 @@
 
                     {
                         note: {
-                            label: "For the country, "+d[0].country+ " we can see that there's a constant linear increase in total GHG ",
+                            label: "For the country, " + d[0].country + " we can see that there's a constant linear increase in total GHG ",
                             //title: "Linear GHG increase",
                             wrap: 200,
                             align: "right"
@@ -374,62 +375,99 @@
 
                         x: 600,
                         y: 100,
-                        dy: -25,
-                        dx: 60,
+                        dy: -1,
+                        dx: 80,
                         className: "Linear"
                     }].map(function (d) { d.color = "red"; return d })
-                    const annotations2 = [{
-                        note: {
-                            label: "For the country, "+d[0].country+ " we can see that there's a constant decline in total GHG ",
-                           // title: "Linear GHG decline",
-                            wrap: 150,
-                            align: "right"
+                const annotations2 = [{
+                    note: {
+                        label: "For the country, " + d[0].country + " we can see that there's a constant decline in total GHG ",
+                        // title: "Linear GHG decline",
+                        wrap: 150,
+                        align: "right"
 
-                        },
+                    },
 
-                        connector: {
-                            end: "arrow" // 'dot' also available
-                        },
+                    connector: {
+                        end: "arrow" // 'dot' also available
+                    },
 
-                        x: 600,
-                        y: 100,
-                        dy: -25,
-                        dx: 60,
-                        className: "Decline"
-                    }
-                
+                    x: 600,
+                    y: 100,
+                    dy: -1,
+                    dx: 80,
+                    className: "Decline"
+                }
+
                 ].map(function (d) { d.color = "#04AA6D"; return d })
-                    
 
+                const annotations3 = [{
+                    type: d3.annotationCalloutCircle,
+                    note: {
+                        label: "During recession in " + d[0].country + ", we can see that there's was a 12% decline in Total GHG during 2007-2009",
+                        // title: "Linear GHG decline",
+                        wrap: 150,
+                        align: "right"
+
+                    },
+
+                    subject: {
+                        radius: 75
+                    },
+                    connector: {
+                        end: "arrow" // 'dot' also available
+                    },
+
+                    x: 300,
+                    y: 285,
+                    dy: 80,
+                    dx: 385,
+                    className: "USA"
+                }
+
+                ].map(function (d) { d.color = "#998024"; return d })
 
                 const makeAnnotations = d3.annotation()
                     .type(d3.annotationLabel)
                     .annotations(annotations)
-                    const makeAnnotations2 = d3.annotation()
+                const makeAnnotations2 = d3.annotation()
                     .type(d3.annotationLabel)
                     .annotations(annotations2)
-                
-                if (d[0].country=='Afghanistan' || d[0].country=='Algeria' || d[0].country=='Bahrain' || d[0].country=='Bangladesh' || d[0].country=='United Arab Emirates' || 
-                d[0].country=='India' || d[0].country=='Eygypt')
-                {wrapper.append("g")
-                    //.attr("class", "annotation-group")
-                    .attr("class", "Linear")
-                    .call(makeAnnotations)
+                const makeAnnotations3 = d3.annotation()
+                    .type(d3.annotationLabel)
+                    .annotations(annotations3)
+
+
+                if (d[0].country == 'Afghanistan' || d[0].country == 'Algeria' || d[0].country == 'Bahrain' || d[0].country == 'Bangladesh' || d[0].country == 'United Arab Emirates' ||
+                    d[0].country == 'India' || d[0].country == 'Eygypt') {
+                    wrapper.append("g")
+                        //.attr("class", "annotation-group")
+                        .attr("class", "Linear")
+                        .call(makeAnnotations)
 
                 }
 
-                if (d[0].country=='Andorra' || d[0].country=='Brazil' || d[0].country=='United States' || d[0].country=='India')
-                {wrapper.append("g")
-                    //.attr("class", "annotation-group")
-                    .attr("class", "Decline")
-                    .call(makeAnnotations2)
+                if (d[0].country == 'Andorra' || d[0].country == 'Brazil' || d[0].country == 'United States'
+                || d[0].country == 'United Kingdom') {
+                    wrapper.append("g")
+                        //.attr("class", "annotation-group")
+                        .attr("class", "Decline")
+                        .call(makeAnnotations2)
 
                 }
 
+                if (d[0].country == 'United States') {
+                    wrapper.append("g")
+                        //.attr("class", "annotation-group")
+                        .attr("class", "USA")
+                        .call(makeAnnotations3)
+
+                }
+                //wrapper.exit().remove();
             }
 
         }
-    
+
     </script>
 </body>
 

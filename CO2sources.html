@@ -2,8 +2,9 @@
 
 <head>
   <title>Narrative Project</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.4.2/vega-tooltip.css" rel="stylesheet"> -->
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,9 +23,9 @@
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li><a href="index.html">Total GHG and Total population</a></li>
+          <li><a href="ProjectWithNavigation.html">Total GHG and Total population</a></li>
           <li class="active"><a>Different contributors to GHG emissions</a></li>
-          <li><a href="CO2trend.html">Total GHG growth in 20 years</a></li>
+          <li><a href="linegraph2.html">Total GHG growth in 20 years</a></li>
         </ul>
       </div>
     </div>
@@ -55,9 +56,9 @@
     <div id="button2">
       <p>Go back to check the relation between Total GHG and population and Total GHG and GDP.</p>
       <!-- <button type="button">Next</button> -->
-      <a href="index.html">&raquo; Previous</a>
+      <a href="ProjectWithNavigation.html">&raquo; Previous</a>
       <p>Click Next to see the Total GHG growth for different countries in last 20 years</p>
-      <a href="CO2trend.html">Next &raquo;</a>
+      <a href="linegraph2.html">Next &raquo;</a>
     </div>
     <!-- <div id="button">
         <button id="play-button">Play</button>
@@ -81,7 +82,7 @@
     async function init() {
 
       var dataset = d3.csv("https://unnatihasija1.github.io/GHGEmissionsData.csv").then(function (data) {
-        var year = '2010';
+        var year = '2000';
         dataglobal = data;
         if (selectedYear = ' ') {
           selectedYear = year;
@@ -169,7 +170,7 @@
             }
 
             d3.select(this).transition()
-              .duration('200')
+              .duration(300)
               .attr("fill", "red");
             tooltip
               .html("Emission Type:" + typeofemission + "<br> Value:" + this.__data__ + "<br>  Year:" + selectedYear)
@@ -181,11 +182,11 @@
           }
           mouseleave = function (selected_year_data) {
             d3.select(this).transition()
-              .duration('200')
+              .duration(500)
               .attr("fill", "coral");
             tooltip
               .transition()
-              .duration(200)
+              .duration(800)
               .style("opacity", 0)
           }
 
@@ -326,7 +327,7 @@
                   label: "For the country, " + country + " we can see that the major source of Greenhouse gases is Methane ",
                   //title: "Linear GHG increase",
                   wrap: 200,
-                  align: "Methane"
+                  align: "right"
 
                 },
 
@@ -336,9 +337,9 @@
 
                 x: 600,
                 y: 100,
-                dy: -25,
-                dx: 60,
-                className: "Linear"
+                dy: -1,
+                dx: 80,
+                className: "Methane"
               }].map(function (d) { d.color = "red"; return d })
             const annotations2 = [{
               note: {
@@ -355,12 +356,12 @@
 
               x: 600,
               y: 100,
-              dy: -25,
-              dx: 60,
+              dy: -1,
+              dx: 80,
               className: "Oil"
             }
 
-            ].map(function (d) { d.color = "#04AA6D"; return d })
+            ].map(function (d) { d.color = "brown"; return d })
 
             const annotations3 = [{
               note: {
@@ -377,8 +378,8 @@
 
               x: 600,
               y: 100,
-              dy: -25,
-              dx: 60,
+              dy: -1,
+              dx: 80,
               className: "Gas"
             }
 
@@ -399,12 +400,12 @@
 
               x: 600,
               y: 100,
-              dy: -25,
-              dx: 60,
+              dy: -1,
+              dx: 80,
               className: "Coal"
             }
 
-            ].map(function (d) { d.color = "#04AA6D"; return d })
+            ].map(function (d) { d.color = "#998024"; return d })
 
             const annotations5 = [{
               note: {
@@ -421,8 +422,8 @@
 
               x: 600,
               y: 100,
-              dy: -25,
-              dx: 60,
+              dy: -1,
+              dx: 80,
               className: "NO2"
             }
 
@@ -445,14 +446,14 @@
 
             annotationsG = d3.select("svg").select("g");
 
-            if (country == 'Afghanistan' || country == 'Angola' || country == 'Argentina' || country == 'Bangladesh' || 
-            country == 'Barbados' || country == 'Bolivia' || country == 'Brazil' ||country == 'Cambodia' ||country == 'Columbia'
-            ||country == 'Ethiopia' ||country == 'Gambia' ||country == 'Georgia' ||country == 'Ghana' ||country == 'Grenada'
-            ||country == 'Gautemala' ||country == 'Guinea' ||country == 'Haiti' ||country == 'Indonesia' ||country == 'Kenya'
-            ||country == 'Laos'||country == 'Libya' ||country == 'Madagascar' ||country == 'Myanmar' ||country == 'Namibia'
-            ||country == 'Nepal' ||country == 'New Zealand' ||country == 'Niger' ||country == 'Nigeria' ||country == 'Pakistan'
-            ||country == 'Paraguay' ||country == 'Peru' ||country == 'Russia' ||country == 'Somalia' ||country == 'Sudan' ||country == 'Tajakistan'
-            ||country == 'Tanzania' ||country == 'Uruguay' ||country == 'Uzbekistan' ||country == 'Vietnam' ||country == 'Zambia' ||country == 'Zimbabwe') {
+            if (country == 'Afghanistan' || country == 'Angola' || country == 'Argentina' || country == 'Bangladesh' ||
+              country == 'Barbados' || country == 'Bolivia' || country == 'Brazil' || country == 'Cambodia' || country == 'Columbia'
+              || country == 'Ethiopia' || country == 'Gambia' || country == 'Georgia' || country == 'Ghana' || country == 'Grenada'
+              || country == 'Gautemala' || country == 'Guinea' || country == 'Haiti' || country == 'Indonesia' || country == 'Kenya'
+              || country == 'Laos' || country == 'Libya' || country == 'Madagascar' || country == 'Myanmar' || country == 'Namibia'
+              || country == 'Nepal' || country == 'New Zealand' || country == 'Niger' || country == 'Nigeria' || country == 'Pakistan'
+              || country == 'Paraguay' || country == 'Peru' || country == 'Russia' || country == 'Somalia' || country == 'Sudan' || country == 'Tajakistan'
+              || country == 'Tanzania' || country == 'Uruguay' || country == 'Uzbekistan' || country == 'Vietnam' || country == 'Zambia' || country == 'Zimbabwe') {
 
               annotationsG
                 //.attr("class", "annotation-group")
@@ -461,34 +462,34 @@
 
             }
             if (country == 'Albania' || country == 'Andorra' || country == 'Austria' || country == 'Canada' || country == 'Chile'
-            || country == 'Costa Rica' || country == 'Croatia' || country == 'Cuba' || country == 'Cyprus' || country == 'Denmark'
-            || country == 'Dominica' || country == 'Dominican Republic' || country == 'Ecuador' || country == 'Eygypt' || country == 'El Salvador'
-            || country == 'France'|| country == 'Greece' || country == 'Guyana' || country == 'Iceland' || country == 'Iraq' || country == 'Ireland'
-            || country == 'Israel' || country == 'Italy' || country == 'Jamaica' || country == 'Japan' || country == 'Kuwait' || country == 'Lebanon'
-            || country == 'Malaysia' || country == 'Maldives' || country == 'Mauritius' || country == 'Mexico' || country == 'Morocco'|| country == 'Norway'
-            || country == 'Portugal' || country == 'Saudi Arabia' || country == 'Seychelles' || country == 'Slovenia'|| country == 'Spain'
-            || country == 'Sri Lanka' || country == 'Sweden' || country == 'Syria' || country == 'Thailand' || country == 'United States' || country == 'Venezuela'
-            || country == 'Yemen' || country == 'Germany') {
+              || country == 'Costa Rica' || country == 'Croatia' || country == 'Cuba' || country == 'Cyprus' || country == 'Denmark'
+              || country == 'Dominica' || country == 'Dominican Republic' || country == 'Ecuador' || country == 'Eygypt' || country == 'El Salvador'
+              || country == 'France' || country == 'Greece' || country == 'Guyana' || country == 'Iceland' || country == 'Iraq' || country == 'Ireland'
+              || country == 'Israel' || country == 'Italy' || country == 'Jamaica' || country == 'Japan' || country == 'Kuwait' || country == 'Lebanon'
+              || country == 'Malaysia' || country == 'Maldives' || country == 'Mauritius' || country == 'Mexico' || country == 'Morocco' || country == 'Norway'
+              || country == 'Portugal' || country == 'Saudi Arabia' || country == 'Seychelles' || country == 'Slovenia' || country == 'Spain'
+              || country == 'Sri Lanka' || country == 'Sweden' || country == 'Syria' || country == 'Thailand' || country == 'United States' || country == 'Venezuela'
+              || country == 'Yemen' || country == 'Germany') {
               annotationsG
                 //.attr("class", "annotation-group")
                 .attr("class", "Oil")
                 .call(makeAnnotations2)
 
             }
-            
+
             if (country == 'Algeria' || country == 'Canada' || country == 'Bahrain' || country == 'Belarus' || country == 'Hungary'
-            || country == 'Iran' || country == 'Netherlands' || country == 'Oman' || country == 'Qatar' || country == 'Tunisia'
-            || country == 'United Arab Emirates' || country == 'United Kingdom') {
+              || country == 'Iran' || country == 'Netherlands' || country == 'Oman' || country == 'Qatar' || country == 'Tunisia'
+              || country == 'United Arab Emirates' || country == 'United Kingdom') {
               annotationsG
                 //.attr("class", "annotation-group")
                 .attr("class", "Gas")
                 .call(makeAnnotations3)
 
             }
-            if (country == 'India' || country == 'Ukraine' || country == 'South Africa' || country == 'North Korea'|| country == 'Australia'
-            || country == 'Bulgaria' || country == 'China' || country == 'Czechia' || country == 'Finland' || country == 'Kazakhstan'
-            || country == 'Poland' || country == 'Ukraine' || country == 'Serbia' || country == 'Slovakia' || country == 'South Korea'
-            || country == 'Turkey'){
+            if (country == 'India' || country == 'Ukraine' || country == 'South Africa' || country == 'North Korea' || country == 'Australia'
+              || country == 'Bulgaria' || country == 'China' || country == 'Czechia' || country == 'Finland' || country == 'Kazakhstan'
+              || country == 'Poland' || country == 'Ukraine' || country == 'Serbia' || country == 'Slovakia' || country == 'South Korea'
+              || country == 'Turkey') {
               annotationsG
                 //.attr("class", "annotation-group")
                 .attr("class", "Coal")
@@ -590,8 +591,8 @@
             var formatDate = d3.timeFormat("%b %Y");
             var parseDate = d3.timeParse("%m/%d/%y");
 
-            var startDate = new Date("2010-01-01"),
-              endDate = new Date("2020-01-01");
+            var startDate = new Date("2000-01-01"),
+              endDate = new Date("2019-01-01");
 
 
             var svg = d3.select("svg");

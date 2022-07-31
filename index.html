@@ -2,8 +2,9 @@
 
 <head>
   <title>Narrative Project</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.4.2/vega-tooltip.css" rel="stylesheet"> -->
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -23,8 +24,8 @@
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li class="active"><a>Total GHG and Total population</a></li>
-          <li><a href="CO2sources.html">Different contributors to GHG emissions</a></li>
-          <li><a href="CO2trend.html">Total GHG growth in 20 years</a></li>
+          <li><a href="barchart2.html">Different contributors to GHG emissions</a></li>
+          <li><a href="linegraph2.html">Total GHG growth in 20 years</a></li>
         </ul>
       </div>
     </div>
@@ -55,14 +56,15 @@
         climate-changing greenhouse gases. Rapid population growth worsens the impacts of climate change by straining
         resources
         and exposing more people to climate-related risks—especially in low-resource regions.
-        <strong>Click on the Year below the chart for which you want to see the data to observe the change in total GHG
+        <br><br><strong>Click on the Year below the chart for which you want to see the data to observe the change in
+          total GHG
           and population.</strong>
       </p>
 
       <div id="button">
         <p>To check the different contributors to GHG click Next</p>
         <!-- <button type="button">Next</button> -->
-        <a href="CO2sources.html">Next &raquo;</a>
+        <a href="barchart2.html">Next &raquo;</a>
       </div>
     </div>
     <!-- <div id="button">
@@ -78,7 +80,7 @@
   <footer class="footer">
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.6.0/d3.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.6.0/d3.min.js"></script> -->
   <script src='https://d3js.org/d3.v5.min.js'></script>
   <script src=" https://d3-annotation.susielu.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
@@ -90,7 +92,7 @@
         var formatInteger = d3.format(",");
         var formatDecimal = d3.format(",.2f");
         prevselecteddata = [];
-
+        annotationsG = d3.select("svg").append("g")
         scatter_plot(d);
       }
       )
@@ -165,14 +167,14 @@
 
         var mouseover = function (selectedYearData) {
           d3.select(this).transition()
-            .duration('200')
-            .attr("r", 9);
+            .duration(200)
+            .attr("r", 10);
           tooltip
             .html("Country:" + selectedYearData.country + "<br>  Population:" + d3.format("0.2f")(selectedYearData.population) + "<br> Total GreenHouseGas Emissions" + d3.format("0.2f")(selectedYearData.total_ghg))
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY) + "px")
-            .style("left", (d3.mouse(this)[0] + 250) + "px")
-            .style("top", (d3.mouse(this)[1] + 230) + "px")
+            .style("left", (d3.mouse(this)[0] + 180) + "px")
+            .style("top", (d3.mouse(this)[1] + 160) + "px")
             .style("opacity", 1)
         }
 
@@ -180,11 +182,11 @@
         // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
         var mouseleave = function (selectedYearData) {
           d3.select(this).transition()
-            .duration('100')
+            .duration(600)
             .attr("r", 5);
           tooltip
             .transition()
-            .duration(200)
+            .duration(600)
             .style("opacity", 0)
         }
 
@@ -248,64 +250,280 @@
         //circleplot.exit().remove();
         prevselecteddata = selectedYearData;
         const annotations = [
-
           {
+            //below in makeAnnotations has type set to d3.annotationLabel
+            //you can add this type value below to override that default
+            type: d3.annotationCalloutCircle,
             note: {
-              label: "China, India and USA are major contributors towards Total GHG ",
-              //title: "Linear GHG increase",
-              wrap: 200,
-              align: "right"
-
+              label: "China, India and USA are major contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
             },
-
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 55
+            },
             connector: {
-              end: "arrow" // 'dot' also available
+              end: "dot" // 'dot' also available
             },
-
-            x: 600,
-            y: 100,
-            dy: -50,
-            dx: 80,
+            x: 550,
+            y: 145,
+            dy: 180,
+            dx: 35,
             className: "M1"
           },
-        //   }].map(function (d) { d.color = "Black"; return d })
-        // const annotations2 = [
           {
-          note: {
-            label: " are the least contributors towards Total Greenhouse gases",
-            // title: "Linear GHG decline",
-            wrap: 150,
-            align: "right"
-
-          },
-
-          connector: {
-            end: "arrow" // 'dot' also available
-          },
-
-          x: 200,
-          y: 500,
-          dy: -35,
-          dx: -110,
-          className: "M1"
-        }
-
+            type: d3.annotationCalloutCircle,
+            note: {
+              label: "Malta, Luxenbourg and Qatar are least contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
+            },
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 50
+            },
+            connector: {
+              end: "dot" // 'dot' also available
+            },
+            x: 230,
+            y: 470,
+            dy: -10,
+            dx: 280,
+            className: "M1"
+          }
         ].map(function (d) { d.color = "#04AA6D"; return d })
 
+        const annotations2 = [
+          {
+            //below in makeAnnotations has type set to d3.annotationLabel
+            //you can add this type value below to override that default
+            type: d3.annotationCalloutCircle,
+            note: {
+              label: "China, India and USA continue to be major contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
+            },
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 55
+            },
+            connector: {
+              end: "dot" // 'dot' also available
+            },
+            x: 550,
+            y: 145,
+            dy: 180,
+            dx: 35,
+            className: "M3"
+          },
+          {
+            type: d3.annotationCalloutCircle,
+            note: {
+              label: "Malta, Malta are least contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
+            },
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 50
+            },
+            connector: {
+              end: "dot" // 'dot' also available
+            },
+            x: 210,
+            y: 510,
+            dy: -10,
+            dx: 280,
+            className: "M2"
+          }
+        ].map(function (d) { d.color = "#04AA6D"; return d })
 
+        const annotations3 = [
+          {
+            //below in makeAnnotations has type set to d3.annotationLabel
+            //you can add this type value below to override that default
+            type: d3.annotationCalloutCircle,
+            note: {
+              label: "China, India and USA still are major contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
+            },
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 55
+            },
+            connector: {
+              end: "dot" // 'dot' also available
+            },
+            x: 560,
+            y: 135,
+            dy: 180,
+            dx: 35,
+            className: "M3"
+          },
+          {
+            type: d3.annotationCalloutCircle,
+            note: {
+              label: "Malta, Maldives and now Iceland are least contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
+            },
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 50
+            },
+            connector: {
+              end: "dot" // 'dot' also available
+            },
+            x: 210,
+            y: 510,
+            dy: -10,
+            dx: 280,
+            className: "M3"
+          }
+        ].map(function (d) { d.color = "#04AA6D"; return d })
+
+        const annotations4 = [
+          {
+            //below in makeAnnotations has type set to d3.annotationLabel
+            //you can add this type value below to override that default
+            type: d3.annotationCalloutCircle,
+            note: {
+              label: "China, India and USA still are major contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
+            },
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 55
+            },
+            connector: {
+              end: "dot" // 'dot' also available
+            },
+            x: 560,
+            y: 135,
+            dy: 180,
+            dx: 35,
+            className: "M4"
+          },
+          {
+            type: d3.annotationCalloutCircle,
+            note: {
+              label: "Bhutan, Malta, Maldives and now Iceland are least contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
+            },
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 55
+            },
+            connector: {
+              end: "dot" // 'dot' also available
+            },
+            x: 200,
+            y: 500,
+            dy: -10,
+            dx: 280,
+            className: "M4"
+          }
+        ].map(function (d) { d.color = "#04AA6D"; return d })
+
+        const annotations5 = [
+          {
+            //below in makeAnnotations has type set to d3.annotationLabel
+            //you can add this type value below to override that default
+            type: d3.annotationCalloutCircle,
+            note: {
+              label: "China, India and USA still are major contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
+            },
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 55
+            },
+            connector: {
+              end: "dot" // 'dot' also available
+            },
+            x: 570,
+            y: 125,
+            dy: 180,
+            dx: 35,
+            className: "M5"
+          },
+          {
+            type: d3.annotationCalloutCircle,
+            note: {
+              label: "Fiji, Bhutan, Maldives are least contributors towards Total GHG",
+              //title: "d3.annotationCalloutCircle",
+              wrap: 190
+            },
+            //settings for the subject, in this case the circle radius
+            subject: {
+              radius: 55
+            },
+            connector: {
+              end: "dot" // 'dot' also available
+            },
+            x: 175,
+            y: 475,
+            dy: -10,
+            dx: 280,
+            className: "M5"
+          }
+        ].map(function (d) { d.color = "#04AA6D"; return d })
 
         const makeAnnotations = d3.annotation()
           .type(d3.annotationLabel)
           .annotations(annotations)
-        // const makeAnnotations2 = d3.annotation()
-        //   .type(d3.annotationLabel)
-        //   .annotations(annotations2)
+        const makeAnnotations2 = d3.annotation()
+          .type(d3.annotationLabel)
+          .annotations(annotations2)
+        const makeAnnotations3 = d3.annotation()
+          .type(d3.annotationLabel)
+          .annotations(annotations3)
+        const makeAnnotations4 = d3.annotation()
+          .type(d3.annotationLabel)
+          .annotations(annotations4)
+        const makeAnnotations5 = d3.annotation()
+          .type(d3.annotationLabel)
+          .annotations(annotations5)
 
-        annotationsG = d3.select("svg").append("g");
-        annotationsG
-          //.attr("class", "annotation-group")
-          .attr("class", "Most")
-          .call(makeAnnotations);
+
+        if (selectedYearData[0].year >= '2000' && selectedYearData[0].year < '2003') {
+          annotationsG
+            //.attr("class", "annotation-group")
+            .attr("class", "M1")
+            .call(makeAnnotations);
+        }
+        if (selectedYearData[0].year >= '2003' && selectedYearData[0].year < '2006') {
+          annotationsG
+            //.attr("class", "annotation-group")
+            .attr("class", "M2")
+            .call(makeAnnotations2);
+        }
+        if (selectedYearData[0].year >= '2006' && selectedYearData[0].year < '2011') {
+          annotationsG
+            //.attr("class", "annotation-group")
+            .attr("class", "M3")
+            .call(makeAnnotations3);
+        }
+        if (selectedYearData[0].year >= '2011' && selectedYearData[0].year < '2014') {
+          annotationsG
+            //.attr("class", "annotation-group")
+            .attr("class", "M4")
+            .call(makeAnnotations4);
+        }
+
+        if (selectedYearData[0].year >= '2014' && selectedYearData[0].year < '2019') {
+          annotationsG
+            //.attr("class", "annotation-group")
+            .attr("class", "M5")
+            .call(makeAnnotations5);
+        }
+
+
         // annotationsG
         //   //.attr("class", "annotation-group")
         //   .attr("class", "Least")
@@ -322,8 +540,8 @@
       var formatDate = d3.timeFormat("%b %Y");
       var parseDate = d3.timeParse("%m/%d/%y");
 
-      var startDate = new Date("2010-01-01"),
-        endDate = new Date("2020-01-01");
+      var startDate = new Date("2000-01-01"),
+        endDate = new Date("2019-01-01");
 
 
       var svg = d3.select("svg");
