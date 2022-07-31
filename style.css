@@ -2,7 +2,6 @@ body {
   /* background-image: url(https://ychef.files.bbci.co.uk/976x549/p0c5zp0h.jpg);*/ 
  /* background-image: url(https://www.ecomatcher.com/wp-content/uploads/2019/10/CarbonFootPrint.jpg); */
  background-size: cover;
- 
  background-color: #ffffcc;
  font-family: 'Calibri';
  font-size: 16.5px;
@@ -168,27 +167,6 @@ rect {
 
 }
 
-/* label input[type="radio"]:checked~span {
- color: #F1F6F6;
- background-color: #998024;
-} */
-
-/* .warning {
- background-color: #ffffcc;
- border-left: 10px solid #ffeb3b;
- height: 30px;
- width: 70%;
- text-align: center;
- font-size: 18px;
- padding: 10px;
-
-} */
-
-/* .info {
- height: 150px;
- width: 96%;
-} */
-
 .nav {
  height: 50px;
  width: 70%;
@@ -232,29 +210,6 @@ h1 {
  letter-spacing: 0.6px;
  word-spacing: -1px;
 }
-
-/* a.button {
- background-color: #4CAF50;
-
- border: none;
- color: white;
- padding: 8px 22px;
- text-align: center;
- text-decoration: none;
- display: inline-block;
- font-size: 16px;
-} */
-
-/* a.backbutton {
- background-color: #f44336;
- border: none;
- color: white;
- padding: 8px 22px;
- text-align: center;
- text-decoration: none;
- display: inline-block;
- font-size: 16px;
-} */
 
 .tooltip-rect {
  fill: transparent;
