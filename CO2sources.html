@@ -193,8 +193,10 @@
 
           if (firstCall == false) {
             var allCountries = Object.keys(countriesDropDown);
-            var initialData = countriesDropDown[allCountries[0]];
+            // var initialData = countriesDropDown[allCountries[0]];
+            var initialData = countriesDropDown[currentCountry];
             updateBars(initialData);
+            return;
           }
           else {
             // Make x scale
